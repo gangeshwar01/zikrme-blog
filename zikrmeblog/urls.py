@@ -62,6 +62,8 @@ urlpatterns = [
     path("panel/hero/", panel_views.hero_list, name="panel_hero_list"),
     path("panel/hero/create/", panel_views.hero_create, name="panel_hero_create"),
     path("panel/hero/<int:pk>/toggle/", panel_views.hero_toggle, name="panel_hero_toggle"),
+    path("panel/hero/<int:pk>/edit/", panel_views.hero_edit, name="panel_hero_edit"),
+    path("panel/hero/<int:pk>/delete/", panel_views.hero_delete, name="panel_hero_delete"),
     # CRUD - Page Hero Images
     path("panel/page-hero/", panel_views.page_hero_list, name="panel_page_hero_list"),
     path("panel/page-hero/create/", panel_views.page_hero_create, name="panel_page_hero_create"),

@@ -202,6 +202,27 @@ def hero_toggle(request, pk: int):
     return redirect("panel_hero_list")
 
 
+@staff_required
+def hero_edit(request, pk: int):
+    item = get_object_or_404(HeroImage, pk=pk)
+    if request.method == "POST":
+        form = HeroImageForm(request.POST, request.FILES, instance=item)
+        if form.is_valid():
+            form.save()
+            return redirect("panel_hero_list")
+    else:
+        form = HeroImageForm(instance=item)
+    return render(request, "panel/hero/edit.html", {"form": form, "item": item})
+
+
+@staff_required
+@require_http_methods(["POST"])
+def hero_delete(request, pk: int):
+    item = get_object_or_404(HeroImage, pk=pk)
+    item.delete()
+    return redirect("panel_hero_list")
+
+
 # -------- Tailwind CRUD: Page Hero Images ---------
 @staff_required
 def page_hero_list(request):

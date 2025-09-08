@@ -1,0 +1,15 @@
+{% extends 'panel/base.html' %}
+{% block title %}Edit Hero Image{% endblock %}
+{% block content %}
+<div class="mb-4">
+  <a href="{% url 'panel_hero_list' %}" class="px-3 py-2 rounded-lg border">Back</a>
+  <h1 class="text-xl font-semibold text-slate-800 mt-3">Edit Hero Image</h1>
+  <form method="post" enctype="multipart/form-data" class="mt-4 space-y-3">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button class="px-3 py-2 rounded-lg bg-blue-600 text-white">Save</button>
+  </form>
+</div>
+{% endblock %}
+
+

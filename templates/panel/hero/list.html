@@ -42,7 +42,15 @@
     </div>
     <div class="p-3 flex items-center justify-between">
       <div class="text-sm text-slate-600">{{ h.caption|default:'—' }}</div>
-      <a class="text-blue-600" href="{% url 'panel_hero_toggle' h.pk %}">{{ h.is_active|yesno:'Disable,Activate' }}</a>
+      <div class="flex items-center gap-3 text-sm">
+        <form method="post" action="{% url 'panel_hero_toggle' h.pk %}">{% csrf_token %}
+          <button class="text-blue-600">{{ h.is_active|yesno:'Disable,Activate' }}</button>
+        </form>
+        <a class="text-slate-700" href="{% url 'panel_hero_edit' h.pk %}">Edit</a>
+        <form method="post" action="{% url 'panel_hero_delete' h.pk %}" onsubmit="return confirm('Delete this image?')">{% csrf_token %}
+          <button class="text-red-600">Delete</button>
+        </form>
+      </div>
     </div>
   </div>
   {% empty %}
