@@ -181,7 +181,15 @@ def hero_list(request):
 def hero_create(request):
     form = HeroImageForm(request.POST, request.FILES)
     if form.is_valid():
-        form.save()
+        try:
+            form.save()
+            request.session['success_message'] = "Hero image uploaded successfully."
+        except Exception as e:
+            request.session['error_message'] = f"Upload failed: {str(e)}"
+    else:
+        request.session['error_message'] = "; ".join(
+            [f"{k}: {', '.join(v)}" for k, v in form.errors.items()]
+        ) or "Please correct the errors in the form."
     return redirect("panel_hero_list")
 
 
