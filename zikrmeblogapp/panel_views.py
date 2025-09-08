@@ -173,7 +173,13 @@ def destination_delete(request, pk: int):
 def hero_list(request):
     items = HeroImage.objects.order_by("order")
     form = HeroImageForm()
-    return render(request, "panel/hero/list.html", {"items": items, "form": form})
+    success_message = request.session.pop('success_message', None)
+    error_message = request.session.pop('error_message', None)
+    return render(
+        request,
+        "panel/hero/list.html",
+        {"items": items, "form": form, "success_message": success_message, "error_message": error_message},
+    )
 
 
 @staff_required
