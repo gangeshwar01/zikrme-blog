@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
+    'whitenoise.runserver_nostatic',
     'django.contrib.staticfiles',
     'zikrmeblogapp',
 ]
@@ -123,14 +124,27 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.2/howto/static-files/
 
-STATIC_URL = 'static/'
-STATICFILES_DIRS = [BASE_DIR / 'static']
-# Collected static root for Render (served by WhiteNoise)
-STATIC_ROOT = BASE_DIR / 'staticfiles'
-
-# Media uploads
+# URL prefixes
+STATIC_URL = '/static/'
 MEDIA_URL = '/media/'
+
+# Local folders
+STATICFILES_DIRS = [BASE_DIR / 'static']
+STATIC_ROOT = BASE_DIR / 'staticfiles'
 MEDIA_ROOT = BASE_DIR / 'media'
+os.makedirs(MEDIA_ROOT, exist_ok=True)
+
+# Storages: Use FileSystem for media, WhiteNoise for staticfiles
+STORAGES = {
+    "default": {
+        "BACKEND": "django.core.files.storage.FileSystemStorage",
+        "LOCATION": MEDIA_ROOT,
+        "BASE_URL": MEDIA_URL,
+    },
+    "staticfiles": {
+        "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
+    },
+}
 
 # Email settings
 # By default, use console/file backend in DEBUG. For production, set SMTP env vars.
