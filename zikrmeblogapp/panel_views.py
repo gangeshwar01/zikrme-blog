@@ -5,7 +5,7 @@ from django.urls import reverse
 from django.views.decorators.http import require_http_methods
 from django.views.decorators.http import require_GET
 
-from .models import Post, Category, Destination, City, PageHeroImage, HomeMiniVideo
+from .models import Post, Category, Destination, City, PageHeroImage, HomeMiniVideo, HeroImage
 from .forms import CategoryForm, PostForm, DestinationForm, HeroImageForm, PageHeroImageForm, HomeMiniVideoForm, PasswordChangeCustomForm
 
 
