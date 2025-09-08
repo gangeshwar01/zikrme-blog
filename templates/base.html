@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  {% load static %}
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{% block title %}ZikRme Blog{% endblock %}</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon@4.2.0/fonts/remixicon.css" />
+  <!-- Add this to your HTML head -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+  <link rel="stylesheet" href="{% static 'css/style.css' %}" />
+  {% block head %}{% endblock %}
+</head>
+<body>
+  {% if request.resolver_match.url_name == 'home' or request.resolver_match.url_name == 'categories' or request.resolver_match.url_name == 'destination' or request.resolver_match.url_name == 'about' or request.resolver_match.url_name == 'contact' %}
+  <header class="site-header">
+    <div class="container nav">
+      <a href="/" class="brand">
+        <img src="{% static 'logo.png' %}" alt="ZikRme" />
+ 
+      </a>
+      <button class="mobile-toggle" aria-label="Toggle navigation"><i class="ri-menu-line"></i></button>
+      <nav class="site-nav" id="site-nav">
+        <a href="/">Home</a>
+        <a href="{% url 'categories' %}">Categories</a>
+        <a href="{% url 'destination' %}">Destination</a>
+        <a href="{% url 'about' %}">About</a>
+        <a href="{% url 'contact' %}">Contact</a>
+      </nav>
+    </div>
+  </header>
+  {% endif %}
+
+  {% block content %}{% endblock %}
+
+  <footer class="site-footer">
+    <div class="container footer-grid">
+      <div class="footer-brand">
+        {% comment %} <div class="logo-line">
+          <img src="{% static 'logo.png' %}" alt="logo" />
+
+        </div> {% endcomment %}
+        <p>
+          Sharing travel stories, insights, and helpful guides to inspire your next
+          adventure. From hidden gems to essential tips, we're here to make your
+          travels unforgettable.
+        </p>
+        <div class="socials">
+          <a href="https://www.facebook.com/zikme.in" aria-label="Facebook"><i class="ri-facebook-fill"></i></a>
+          <a href="https://x.com/zikrmeofficial" aria-label="Twitter"><i class="ri-twitter-x-line"></i></a>
+          <a href="#" aria-label="LinkedIn"><i class="ri-linkedin-fill"></i></a>
+          <a href="https://whatsapp.com/channel/0029Vb6TFqCGpLHMSkUTxf3q" aria-label="WhatsApp"><i class="ri-whatsapp-line"></i></a>
+          <a href="https://t.me/zikrmeofficial" aria-label="Telegram"><i class="ri-telegram-fill"></i></a>
+          <a href="https://www.instagram.com/zikrmeofficial/" aria-label="Instagram"><i class="ri-instagram-line"></i></a>
+        </div>
+      </div>
+      <div>
+        <h4>Quick Links</h4>
+        <ul>
+          <li><a href="/">Home</a></li>
+          <li><a href="{% url 'about' %}">About the Blog</a></li>
+          <li><a href="{% url 'contact' %}">Contact</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Categories</h4>
+        <ul>
+          {% for c in footer_categories %}
+            <li><a href="{% url 'posts_by_category' c.slug %}">{{ c.name }}</a></li>
+          {% empty %}
+            <li><a href="{% url 'categories' %}">Browse all</a></li>
+            <li><a href="{% url 'featured_list' %}">Featured</a></li>
+            <li><a href="{% url 'articles_list' %}">Articles</a></li>
+          {% endfor %}
+        </ul>
+      </div>
+    </div>
+    <div class="container footer-bottom">
+      <span>© {% now 'Y' %} ZikRme Blog. All rights reserved.</span>
+      <div class="policies">
+        <a href="{% url 'privacy_policy' %}">Privacy Policy</a>
+        <a href="{% url 'terms_and_conditions' %}">Terms of Use</a>
+      </div>
+    </div>
+  </footer>
+
+  <script src="{% static 'js/main.js' %}"></script>
+  {% block scripts %}{% endblock %}
+</body>
+</html>

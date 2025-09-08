@@ -1,0 +1,14 @@
+{% extends 'panel/base.html' %}
+{% block title %}{{ title }}{% endblock %}
+{% block nav_home_mini_video %}bg-blue-50 text-blue-600{% endblock %}
+{% block content %}
+<h1 class="text-xl font-semibold mb-4">{{ title }}</h1>
+<form method="post" enctype="multipart/form-data" class="bg-white border border-slate-200 rounded-xl p-5 space-y-4 max-w-2xl">
+  {% csrf_token %}
+  {{ form.as_p }}
+  <div class="flex gap-2">
+    <a href="{% url 'panel_home_mini_video_list' %}" class="px-3 py-2 rounded-lg border">Cancel</a>
+    <button class="px-3 py-2 rounded-lg bg-blue-600 text-white">Save</button>
+  </div>
+</form>
+{% endblock %}

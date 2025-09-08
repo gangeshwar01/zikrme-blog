@@ -1,0 +1,24 @@
+services:
+  - type: web
+    name: zikrme-blog
+    env: python
+    buildCommand: pip install -r requirements.txt && python manage.py collectstatic --no-input && python manage.py migrate
+    startCommand: gunicorn zikrmeblog.wsgi:application
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.10.0
+      - key: DJANGO_SETTINGS_MODULE
+        value: zikrmeblog.settings
+      - key: SECRET_KEY
+        generateValue: true
+      - key: DEBUG
+        value: False
+      - key: ALLOWED_HOSTS
+        value: zikrme-blog.onrender.com
+      - key: DEFAULT_FROM_EMAIL
+        value: no-reply@zikrme.com
+    plan: free
+    disk:
+      name: zikrme-blog-data
+      mountPath: /opt/render/project/src/media
+      sizeGB: 1

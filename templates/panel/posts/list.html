@@ -1,0 +1,68 @@
+{% extends 'panel/base.html' %}
+{% block title %}Posts{% endblock %}
+{% block nav_posts %}bg-blue-50 text-blue-600{% endblock %}
+{% block content %}
+<div class="flex items-center justify-between mb-4">
+  <h1 class="text-xl font-semibold text-slate-800">Posts</h1>
+  <a href="{% url 'panel_post_create' %}" class="px-3 py-2 rounded-lg bg-blue-600 text-white shadow-sm">New Post</a>
+ </div>
+
+<div class="bg-white border border-slate-200 rounded-xl overflow-hidden shadow-sm">
+  <div class="p-3 flex flex-wrap gap-2 border-b border-slate-200">
+    <form id="post-search-form" method="get" class="flex items-center gap-2">
+      <input type="search" name="q" value="{{ query }}" placeholder="Search posts..." class="px-3 py-2 rounded-lg border border-slate-300" autofocus />
+      <button class="px-3 py-2 rounded-lg border">Search</button>
+      {% if query %}
+      <a href="{% url 'panel_post_list' %}" class="px-3 py-2 rounded-lg border text-slate-600">Clear</a>
+      {% endif %}
+    </form>
+    <script>
+      (function(){
+        const form = document.getElementById('post-search-form');
+        const input = form.querySelector('input[name="q"]');
+        let t;
+        input.addEventListener('input', function(){
+          clearTimeout(t);
+          t = setTimeout(()=>{ form.submit(); }, 400);
+        });
+      })();
+    </script>
+    <div class="ml-auto flex items-center gap-2 text-xs">
+      <span class="px-2 py-1 rounded-full bg-green-50 text-green-700">Published</span>
+      <span class="px-2 py-1 rounded-full bg-amber-50 text-amber-700">Featured</span>
+      <span class="px-2 py-1 rounded-full bg-blue-50 text-blue-700">Article</span>
+    </div>
+  </div>
+  <table class="min-w-full text-sm">
+    <thead class="bg-slate-50">
+      <tr class="text-left text-slate-500">
+        <th class="p-3">Title</th>
+        <th class="p-3">Featured</th>
+        <th class="p-3">Article</th>
+        <th class="p-3">Published</th>
+        <th class="p-3 w-40"></th>
+      </tr>
+    </thead>
+    <tbody class="divide-y divide-slate-100">
+      {% for p in items %}
+      <tr>
+        <td class="p-3">{{ p.title }}</td>
+        <td class="p-3">{% if p.is_featured %}<span class="px-2 py-1 bg-amber-50 text-amber-700 rounded-full text-xs">Yes</span>{% else %}—{% endif %}</td>
+        <td class="p-3">{% if p.is_article %}<span class="px-2 py-1 bg-blue-50 text-blue-700 rounded-full text-xs">Yes</span>{% else %}—{% endif %}</td>
+        <td class="p-3">{% if p.is_published %}<span class="px-2 py-1 bg-green-50 text-green-700 rounded-full text-xs">Yes</span>{% else %}<span class="text-slate-500">Draft</span>{% endif %}</td>
+        <td class="p-3 text-right">
+          <a class="px-2 py-1 text-blue-700" href="{% url 'panel_post_edit' p.pk %}">Edit</a>
+          <form method="post" action="{% url 'panel_post_delete' p.pk %}" class="inline">{% csrf_token %}
+            <button class="px-2 py-1 text-red-600" onclick="return confirm('Delete this post?')">Delete</button>
+          </form>
+        </td>
+      </tr>
+      {% empty %}
+      <tr><td class="p-3 text-slate-500" colspan="5">No posts yet.</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}
+
+

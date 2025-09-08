@@ -1,0 +1,113 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{% block title %}Panel{% endblock %} - ZikRme</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = { theme: { extend: { colors: { brand: '#2563eb' } } } }
+  </script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon@4.2.0/fonts/remixicon.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+  {% block head %}{% endblock %}
+</head>
+<body class="bg-slate-100">
+  <div class="min-h-screen flex">
+    <!-- Sidebar -->
+    <aside id="panelSidebar" class="w-72 bg-white border-r border-slate-200 hidden md:flex flex-col fixed md:static inset-y-0 left-0 z-50">
+      <div class="h-16 px-4 flex items-center gap-3 border-b border-slate-200">
+        <img src="{% static 'logo_black.png' %}" class="w-14 h-10 rounded-xl" />
+        <div class="font-semibold">ZikRme Panel</div>
+      </div>
+      <div class="p-3 border-b border-slate-200">
+        <form action="{% url 'panel_post_list' %}" method="get">
+          <input name="q" value="{{ request.GET.q }}" class="w-full px-3 py-2 rounded-lg border border-slate-200 text-sm" placeholder="Search posts..." />
+        </form>
+      </div>
+      <nav class="px-2 text-slate-600 space-y-1 flex-1 py-3">
+        <a href="{% url 'panel_dashboard' %}" class="flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-slate-100 {% block nav_dashboard %}{% endblock %}">
+          <i class="ri-dashboard-line"></i> Dashboard
+        </a>
+        
+        <a href="{% url 'panel_category_list' %}" class="flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-slate-100 {% block nav_categories %}{% endblock %}">
+          <i class="ri-price-tag-3-line"></i> Categories
+        </a>
+
+        <a href="{% url 'panel_post_list' %}" class="flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-slate-100 {% block nav_posts %}{% endblock %}">
+          <i class="ri-article-line"></i> Posts
+        </a>
+
+        <a href="{% url 'panel_destination_list' %}" class="flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-slate-100 {% block nav_destinations %}{% endblock %}">
+          <i class="ri-map-pin-2-line"></i> Destinations
+        </a>
+        <a href="{% url 'panel_page_hero_list' %}" class="flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-slate-100 {% block nav_page_heroes %}{% endblock %}">
+          <i class="ri-layout-line"></i> Page Heroes
+        </a>
+        <a href="{% url 'panel_home_mini_video_list' %}" class="flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-slate-100 {% block nav_home_mini_video %}{% endblock %}">
+          <i class="ri-video-line"></i> Home Mini Video
+        </a>
+        <!-- <a href="{% url 'admin:index' %}" class="flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-slate-100 {% block nav_admin %}{% endblock %}">
+          <i class="ri-settings-3-line"></i> Advanced Admin
+        </a> -->
+      </nav>
+      <div class="p-4 text-xs text-slate-500">© {% now 'Y' %} ZikRme</div>
+    </aside>
+
+    <!-- Main -->
+    <main class="flex-1">
+      <!-- Top bar -->
+      <div class="h-16 bg-white border-b border-slate-200 px-4 flex items-center justify-between shadow-sm">
+        <div class="flex items-center gap-2">
+          <button id="sidebarToggle" class="md:hidden inline-flex items-center justify-center w-10 h-10 rounded-lg border border-slate-200">
+            <i class="ri-menu-line"></i>
+          </button>
+          <a class="text-slate-600 hover:text-slate-800" href="/">Visit site</a>
+        </div>
+        <div class="flex items-center gap-2">
+          <!-- Notifications -->
+          {% comment %} <button id="notifBtn" class="relative inline-flex items-center justify-center w-10 h-10 rounded-lg border border-slate-200">
+            <i class="ri-notification-3-line"></i>
+            <span class="absolute -top-1 -right-1 bg-red-500 text-white text-[10px] rounded-full px-1">3</span>
+          </button> {% endcomment %}
+          <!-- Profile dropdown -->
+          <div class="relative">
+            <button id="profileBtn" class="inline-flex items-center gap-2 px-3 py-2 rounded-lg border border-slate-200">
+              <i class="ri-account-circle-line"></i>
+              {{ request.user.get_short_name|default:request.user.username }}
+              <i class="ri-arrow-down-s-line"></i>
+            </button>
+            <div id="profileMenu" class="hidden absolute right-0 mt-2 w-48 bg-white border border-slate-200 rounded-lg shadow-lg">
+              <a href="{% url 'panel_password_change' %}" class="block px-3 py-2 hover:bg-slate-50">Change password</a>
+              <a href="{% url 'admin:logout' %}" class="block px-3 py-2 hover:bg-slate-50">Logout</a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Content -->
+      <div class="p-4 md:p-6">
+        {% block content %}{% endblock %}
+      </div>
+    </main>
+  </div>
+
+  <script>
+    // Simple dropdown
+    const btn = document.getElementById('profileBtn');
+    const menu = document.getElementById('profileMenu');
+    if(btn){ btn.addEventListener('click', ()=> menu.classList.toggle('hidden')); }
+    // Mobile sidebar toggle
+    const sbToggle = document.getElementById('sidebarToggle');
+    const sidebar = document.getElementById('panelSidebar');
+    if(sbToggle && sidebar){
+      sbToggle.addEventListener('click', ()=>{
+        sidebar.classList.toggle('hidden');
+      });
+    }
+  </script>
+</body>
+</html>
+
+

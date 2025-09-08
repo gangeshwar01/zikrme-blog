@@ -1,0 +1,55 @@
+{% extends "admin/base.html" %}
+{% load static %}
+
+{% block title %}ZikRme Admin | {{ title }}{% endblock %}
+
+{% block extrastyle %}
+{{ block.super }}
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon@4.2.0/fonts/remixicon.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+<link rel="stylesheet" href="{% static 'css/panel.css' %}">
+<style>
+  /* Scoped to login page only */
+  :root{--bg1:#0b1324;--bg2:#0e1a34;--card:#101f3c;--muted:#9bb0e0;--text:#e6eeff;--primary:#3b82f6;--primary-600:#2563eb;--ring:#60a5fa}
+  body.login{background: radial-gradient(1200px 600px at 10% -10%, #14213a33, transparent), linear-gradient(160deg, var(--bg1), var(--bg2)); font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;}
+  body.login #container{background: color-mix(in srgb, var(--card) 92%, #000 8%); border-color: #243b6b; color: var(--text); border-radius: 16px; box-shadow: 0 12px 30px #00000055, inset 0 1px 0 #ffffff0d}
+  body.login #header{background: transparent; border-bottom: 0}
+  body.login #content{padding-top: 10px}
+  body.login .brand{display:flex; align-items:center; gap:10px; justify-content:center; margin-bottom: 8px}
+  body.login .brand img{width:42px; height:42px; border-radius:12px}
+  body.login .brand span{font-weight:700; font-size:20px}
+  body.login .help{color:var(--muted)}
+  body.login a{color:var(--muted)}
+  body.login .form-row label{color: var(--muted)}
+  body.login .form-row input{background:#0f1c35; color:var(--text); border:1px solid #274068; border-radius:10px; padding:10px 12px}
+  body.login .form-row input:focus{outline:0; border-color: var(--ring); box-shadow:0 0 0 3px #60a5fa33}
+  body.login .submit-row{border:0; padding-top: 8px}
+  body.login .submit-row input{background: linear-gradient(180deg, var(--primary), var(--primary-600)); border:0; color:white; border-radius:10px; padding:10px 16px; transition: transform .05s ease, filter .15s ease}
+  body.login .submit-row input:hover{filter:brightness(1.06)}
+  body.login .submit-row input:active{transform: translateY(1px)}
+</style>
+{% endblock %}
+
+{% block branding %}
+<h1 id="site-name" class="brand">
+  <a href="/panel/">
+    <img src="{% static 'logo.png' %}" alt="ZikRme" />
+    <span>ZikRme Admin</span>
+  </a>
+  <a class="visit" href="/" target="_blank" rel="noopener">
+    <i class="ri-external-link-line"></i> Visit Site
+  </a>
+</h1>
+{% endblock %}
+
+{% block nav-global %}
+<nav class="top-nav">
+  <a href="/panel/"><i class="ri-dashboard-line"></i> Dashboard</a>
+  <a href="{% url 'admin:zikrmeblogapp_post_changelist' %}"><i class="ri-article-line"></i> Posts</a>
+  <a href="{% url 'admin:zikrmeblogapp_category_changelist' %}"><i class="ri-price-tag-3-line"></i> Categories</a>
+  <a href="{% url 'admin:zikrmeblogapp_destination_changelist' %}"><i class="ri-map-pin-2-line"></i> Destinations</a>
+  <a href="{% url 'admin:zikrmeblogapp_city_changelist' %}"><i class="ri-community-line"></i> Cities</a>
+</nav>
+{% endblock %}
+
+

@@ -1,0 +1,60 @@
+<article class="card post-card">
+  <div class="media">
+    {% if post.image %}
+      <img src="{{ post.image.url }}" alt="{{ post.title }}" />
+    {% elif post.youtube_url %}
+      <div class="video-thumb">
+        <iframe src="https://www.youtube.com/embed/{{ post.youtube_url|cut:'https://youtu.be/'|cut:'https://www.youtube.com/watch?v=' }}?playsinline=1&rel=0&modestbranding=1&enablejsapi=1&origin={{ request.build_absolute_uri|slice:':50' }}&widget_referrer={{ request.build_absolute_uri|slice:':50' }}&iv_load_policy=3&fs=1&cc_load_policy=0&disablekb=1&controls=1" title="{{ post.title }}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen loading="lazy"></iframe>
+      </div>
+    {% else %}
+      <div class="placeholder"></div>
+    {% endif %}
+    <!-- Desktop overlay meta -->
+    <div class="desktop-meta-overlay">
+      {% if post.categories.all %}
+        {% with first=post.categories.all|first %}
+          {% if first %}
+            <a class="chip small primary" href="{% url 'posts_by_category' first.slug %}">{{ first.name }}</a>
+          {% endif %}
+        {% endwith %}
+      {% endif %}
+      {% if post.published_at %}
+        <span class="dot-sep">{{ post.published_at|date:"d/m/Y" }}</span>
+      {% endif %}
+    </div>
+  </div>
+  <div class="card-body">
+    <!-- Mobile meta below image -->
+    <div class="mobile-meta-top">
+      {% if post.categories.all %}
+        {% with first=post.categories.all|first %}
+          {% if first %}
+            <a class="chip small primary" href="{% url 'posts_by_category' first.slug %}">{{ first.name }}</a>
+          {% endif %}
+        {% endwith %}
+      {% endif %}
+      {% if post.published_at %}
+        <span class="dot-sep">{{ post.published_at|date:"d/m/Y" }}</span>
+      {% endif %}
+    </div>
+    <h3 class="post-title">{{ post.title }}</h3>
+    <p class="post-excerpt">{{ post.description|truncatewords:30 }}</p>
+    <div class="meta-bottom">
+      <div class="links left ">
+        {% for link in post.links.all %}
+          <a class="chip small" href="{{ link.url }}" target="_blank" rel="noopener">{{ link.label }}</a>
+        {% empty %}
+          {% if post.external_link %}
+            <a class="chip small" href="{{ post.external_link }}" target="_blank" rel="noopener">{{ post.external_link|cut:'https://'|cut:'http://'|cut:'www.'|truncatechars:22 }}</a>
+          {% endif %}
+        {% endfor %}
+      </div>
+      <span class="icon-text center"><i class="ri-time-line"></i> {{ post.estimated_read_minutes }} min read</span>
+      <div class="right">
+        <a class="btn-link" href="{% url 'post_detail' post.slug %}">Read More</a>
+      </div>
+    </div>
+  </div>
+</article>
+
+

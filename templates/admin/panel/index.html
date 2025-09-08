@@ -1,0 +1,120 @@
+{% extends "admin/base_site.html" %}
+{% load static %}
+
+{% block extrastyle %}
+{{ block.super }}
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon@4.2.0/fonts/remixicon.css" />
+<style>
+  .panel-wrap{max-width:1200px;margin:24px auto;padding:0 16px}
+  .kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px}
+  .kpi{background:#0f1d34;border:1px solid #1f3054;border-radius:12px;padding:18px;color:#e6eeff;display:flex;gap:14px;align-items:center}
+  .kpi i{font-size:26px;color:#9bb0e0}
+  .kpi .num{font-size:28px;font-weight:700}
+  .cards{margin-top:18px;display:grid;grid-template-columns:2fr 1fr;gap:16px}
+  .card{background:#0f1d34;border:1px solid #1f3054;border-radius:12px;padding:18px;color:#e6eeff}
+  .recent li{margin:10px 0}
+  .quick a{display:block;margin:10px 0;color:#cfe0ff;text-decoration:none}
+  .page-heroes{margin-top:18px;background:#0f1d34;border:1px solid #1f3054;border-radius:12px;padding:18px;color:#e6eeff}
+  .page-heroes h2{margin-top:0}
+  .page-hero-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:16px;margin-top:16px}
+  .page-hero-item{background:#1a2a4a;border:1px solid #2a3a5a;border-radius:8px;padding:16px;display:flex;justify-content:space-between;align-items:center}
+  .page-hero-item .info h4{margin:0 0 8px;color:#e6eeff}
+  .page-hero-item .info p{margin:0;color:#9bb0e0;font-size:14px}
+  .page-hero-item .status{display:flex;align-items:center;gap:8px}
+  .status-badge{padding:4px 8px;border-radius:4px;font-size:12px;font-weight:600}
+  .status-active{background:#1e4d2b;color:#4ade80}
+  .status-inactive{background:#4c1d1d;color:#f87171}
+  .debug-info{background:#1a2a4a;border:1px solid #2a3a5a;border-radius:8px;padding:16px;margin-bottom:16px;color:#9bb0e0}
+  @media(max-width:900px){.cards{grid-template-columns:1fr}}
+</style>
+{% endblock %}
+
+{% block content %}
+  <div class="panel-wrap">
+    <h1 style="margin:10px 0">Welcome to ZikRme Admin</h1>
+    
+    <!-- Debug Info -->
+    <div class="debug-info">
+      <h3>Debug Info:</h3>
+      <p>Posts: {{ posts }}</p>
+      <p>Page Heroes: {{ page_heroes|length|default:"Not found" }}</p>
+      <p>Page Heroes Type: {{ page_heroes|default:"None" }}</p>
+      <p>All Context Keys: {{ request.resolver_match.kwargs|default:"No kwargs" }}</p>
+      <p>Debug Error: {{ debug_error|default:"No error" }}</p>
+      {% if page_heroes %}
+        <p style="color:#4ade80;">✓ Page Heroes found: {{ page_heroes|length }}</p>
+      {% else %}
+        <p style="color:#f87171;">✗ Page Heroes not found or empty</p>
+      {% endif %}
+    </div>
+    
+    <div class="kpis">
+      <div class="kpi"><i class="ri-article-line"></i><div><div class="num">{{ posts }}</div><div>Total Posts</div></div></div>
+      <div class="kpi"><i class="ri-check-double-line"></i><div><div class="num">{{ published }}</div><div>Published</div></div></div>
+      <div class="kpi"><i class="ri-star-smile-line"></i><div><div class="num">{{ featured }}</div><div>Featured</div></div></div>
+      <div class="kpi"><i class="ri-lightbulb-flash-line"></i><div><div class="num">{{ articles }}</div><div>Articles</div></div></div>
+      <div class="kpi"><i class="ri-price-tag-3-line"></i><div><div class="num">{{ categories }}</div><div>Categories</div></div></div>
+      <div class="kpi"><i class="ri-map-pin-2-line"></i><div><div class="num">{{ destinations }}</div><div>Destinations</div></div></div>
+      <div class="kpi"><i class="ri-community-line"></i><div><div class="num">{{ cities }}</div><div>Cities</div></div></div>
+    </div>
+
+    <div class="cards">
+      <div class="card">
+        <h2>Recent Posts</h2>
+        <ul class="recent">
+          {% for p in recent_posts %}
+            <li>{{ p.title }} {% if not p.is_published %}<span style="color:#f7c948">(draft)</span>{% endif %}</li>
+          {% empty %}
+            <li>No posts yet.</li>
+          {% endfor %}
+        </ul>
+      </div>
+      <div class="card quick">
+        <h2>Quick Actions</h2>
+        <a href="{% url 'panel:zikrmeblogapp_post_add' %}"><i class="ri-add-line"></i> Add Post</a>
+        <a href="{% url 'panel:zikrmeblogapp_category_add' %}"><i class="ri-price-tag-3-line"></i> Add Category</a>
+        <a href="{% url 'panel:zikrmeblogapp_heroimage_add' %}"><i class="ri-image-add-line"></i> Add Hero Image</a>
+        <a href="{% url 'panel:zikrmeblogapp_destination_add' %}"><i class="ri-map-pin-add-line"></i> Add Destination</a>
+        <a href="{% url 'panel:zikrmeblogapp_pageheroimage_add' %}"><i class="ri-layout-line"></i> Add Page Hero</a>
+      </div>
+    </div>
+
+    <div class="page-heroes">
+      <h2>Page Hero Images</h2>
+      <div class="page-hero-grid">
+        {% if page_heroes %}
+          <p>Found {{ page_heroes|length }} page hero images</p>
+          {% for hero in page_heroes %}
+            <div class="page-hero-item">
+              <div class="info">
+                <h4>{{ hero.get_page_display }}</h4>
+                <p>{{ hero.title|default:"No title set" }}</p>
+              </div>
+              <div class="status">
+                {% if hero.is_active %}
+                  <span class="status-badge status-active">Active</span>
+                {% else %}
+                  <span class="status-badge status-inactive">Inactive</span>
+                {% endif %}
+                <a href="#" style="color:#9bb0e0;text-decoration:none;">
+                  <i class="ri-edit-line"></i>
+                </a>
+              </div>
+            </div>
+          {% endfor %}
+        {% else %}
+          <div style="grid-column:1/-1;text-align:center;color:#9bb0e0;padding:20px;">
+            <i class="ri-layout-line" style="font-size:24px;margin-bottom:8px;display:block;"></i>
+            <p>No page hero images configured yet.</p>
+            <p>Debug: page_heroes variable is empty</p>
+            <a href="#" style="color:#4ade80;text-decoration:none;">
+              <i class="ri-add-line"></i> Add your first page hero
+            </a>
+          </div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+{% endblock %}
+
+

@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="content-without-hero">
+{% if destination.hero_image %}
+  <section class="page-hero">
+    <div class="page-hero-bg" style="background-image:url('{{ destination.hero_image.url }}')">
+      <div class="overlay"></div>
+      <div class="hero-content container">
+        <h1>{{ destination.title }}</h1>
+      </div>
+    </div>
+  </section>
+{% endif %}
+<div class="container section">
+  {% if not destination.hero_image %}<h1>{{ destination.title }}</h1>{% endif %}
+  <p>{{ destination.description }}</p>
+  {% for city in destination.cities.all %}
+    <h3>{{ city.name }}</h3>
+    <p>{{ city.description }}</p>
+    <div class="media-grid">
+      {% for m in city.media.all %}
+        {% if m.image %}
+          <img class="rounded" src="{{ m.image.url }}" alt="{{ city.name }}" />
+        {% elif m.youtube_url %}
+          <div class="video-thumb">
+            <iframe src="https://www.youtube.com/embed/{{ m.youtube_url|cut:'https://youtu.be/'|cut:'https://www.youtube.com/watch?v=' }}?playsinline=1&rel=0&modestbranding=1&enablejsapi=1&origin={{ request.build_absolute_uri|slice:':50' }}&widget_referrer={{ request.build_absolute_uri|slice:':50' }}&iv_load_policy=3&fs=1&cc_load_policy=0&disablekb=1&controls=1" title="{{ city.name }}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen loading="lazy"></iframe>
+          </div>
+        {% endif %}
+      {% endfor %}
+    </div>
+  {% empty %}
+    <p>No cities added to this destination yet.</p>
+  {% endfor %}
+
+  {% if destination.mini_video %}
+    <div class="floating-mini-video" data-draggable="true">
+      <video src="{{ destination.mini_video.url }}" autoplay muted playsinline loop controls></video>
+      <button class="close-mini-video" aria-label="Close">×</button>
+    </div>
+  {% endif %}
+</div>
+</div>
+{% endblock %}
+
+

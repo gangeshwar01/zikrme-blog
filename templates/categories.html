@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+{% include 'partials/page_hero.html' %}
+
+<section class="container section">
+  <div class="section-head">
+    <h2>Explore Categories</h2>
+    <p>Discover content organized by topics and interests</p>
+  </div>
+  <div class="categories-grid">
+    {% for c in categories %}
+      <a class="category-card" href="{% url 'posts_by_category' c.slug %}">
+        <i class="{{ c.icon_class|default:'ri-hashtag' }}"></i>
+        <div>
+          <h3>{{ c.name }}</h3>
+          <p>{{ c.posts.count }} posts</p>
+        </div>
+      </a>
+    {% empty %}
+      <p>No categories available.</p>
+    {% endfor %}
+  </div>
+</section>
+{% endblock %}
+

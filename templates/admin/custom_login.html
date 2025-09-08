@@ -1,0 +1,42 @@
+{% extends "admin/login.html" %}
+{% load static %}
+
+{% block extrastyle %}
+{{ block.super }}
+<style>
+  :root{--bg1:#0b1324;--bg2:#0e1a34;--card:#101f3c;--muted:#9bb0e0;--text:#e6eeff;--primary:#3b82f6;--primary-600:#2563eb;--ring:#60a5fa}
+  body.login{background: radial-gradient(1200px 600px at 10% -10%, #14213a33, transparent), linear-gradient(160deg, var(--bg1), var(--bg2)); font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;}
+  .login #container{background: color-mix(in srgb, var(--card) 92%, #000 8%); border-color: #243b6b; color: var(--text); border-radius: 16px; box-shadow: 0 12px 30px #00000055, inset 0 1px 0 #ffffff0d}
+  .login #header{background: transparent; border-bottom: 0}
+  .login #content{padding-top: 10px}
+  .brand{display:flex; align-items:center; gap:10px; justify-content:center; margin-bottom: 8px}
+  .brand img{width:42px; height:42px; border-radius:12px}
+  .brand span{font-weight:700; font-size:20px}
+  .help{color:var(--muted)}
+  a{color:var(--muted)}
+
+  /* Inputs */
+  .login .form-row label{color: var(--muted)}
+  .login .form-row input{background:#0f1c35; color:var(--text); border:1px solid #274068; border-radius:10px; padding:10px 12px}
+  .login .form-row input:focus{outline:0; border-color: var(--ring); box-shadow:0 0 0 3px #60a5fa33}
+
+  /* Button */
+  .submit-row{border:0; padding-top: 8px}
+  .submit-row input{background: linear-gradient(180deg, var(--primary), var(--primary-600)); border:0; color:white; border-radius:10px; padding:10px 16px; transition: transform .05s ease, filter .15s ease}
+  .submit-row input:hover{filter:brightness(1.06)}
+  .submit-row input:active{transform: translateY(1px)}
+</style>
+{% endblock %}
+
+{% block content_title %}{% endblock %}
+
+{% block content %}
+  <div class="brand">
+    <img src="{% static 'logo.png' %}" alt="ZikRme"/>
+    <span>ZikRme Admin</span>
+  </div>
+  {{ block.super }}
+  <p class="help" style="text-align:center;margin-top:10px">Use your staff credentials to sign in.</p>
+{% endblock %}
+
+

@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="content-without-hero">
+<div class="container section">
+  <div class="section-head">
+    {% if list_title %}
+      <h1>{{ list_title }}</h1>
+    {% elif category %}
+      <h1>{{ category.name }}</h1>
+    {% else %}
+      <h1>All Posts</h1>
+    {% endif %}
+  </div>
+  <div class="cards">
+    {% for p in page_obj.object_list %}
+      {% include 'partials/post_card.html' with post=p %}
+    {% empty %}
+      <p>No posts found.</p>
+    {% endfor %}
+  </div>
+
+  {% if page_obj.paginator.num_pages > 1 %}
+    <div class="pagination">
+      {% if page_obj.has_previous %}
+        <a href="?page={{ page_obj.previous_page_number }}">Prev</a>
+      {% endif %}
+      <span>Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</span>
+      {% if page_obj.has_next %}
+        <a href="?page={{ page_obj.next_page_number }}">Next</a>
+      {% endif %}
+    </div>
+  {% endif %}
+</div>
+</div>
+{% endblock %}
+
+

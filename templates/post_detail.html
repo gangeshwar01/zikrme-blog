@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="post-read">
+{% if post.image %}
+  <div class="post-hero" style="background-image:url('{{ post.image.url }}');"></div>
+{% endif %}
+<div class="content-without-hero">
+<div class="container section post-content">
+  <article class="post-detail">
+    <h1 class="post-title-lg">{{ post.title }}</h1>
+    <div class="meta-top">
+      {% if post.categories.all %}
+        {% with first=post.categories.all|first %}
+          {% if first %}
+            <a class="chip small primary" href="{% url 'posts_by_category' first.slug %}">{{ first.name }}</a>
+          {% endif %}
+        {% endwith %}
+      {% endif %}
+      <span class="dot-sep">{{ post.published_at|date:"d/m/Y" }}</span>
+      <span class="icon-text"><i class="ri-time-line"></i> {{ post.estimated_read_minutes }} min read</span>
+      <button class="share-btn" data-title="{{ post.title }}" data-url="{{ request.build_absolute_uri }}" aria-label="Share post">
+        <i class="ri-share-forward-line"></i> Share
+      </button>
+    </div>
+    {% if not post.image and post.youtube_url %}
+      <div class="media video-thumb">
+        <iframe src="https://www.youtube.com/embed/{{ post.youtube_url|cut:'https://youtu.be/'|cut:'https://www.youtube.com/watch?v=' }}?playsinline=1&rel=0&modestbranding=1&enablejsapi=1&origin={{ request.build_absolute_uri|slice:':50' }}&widget_referrer={{ request.build_absolute_uri|slice:':50' }}&iv_load_policy=3&fs=1&cc_load_policy=0&disablekb=1&controls=1" title="{{ post.title }}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen loading="lazy"></iframe>
+      </div>
+    {% endif %}
+    <div class="content">{{ post.description|linebreaks }}</div>
+    {% if post.links.all %}
+    <div class="post-links">
+      {% for link in post.links.all %}
+        <a class="chip small" href="{{ link.url }}" target="_blank" rel="noopener">{{ link.label }}</a>
+      {% endfor %}
+    </div>
+    {% endif %}
+  </article>
+</div>
+</div>
+</div>
+{% endblock %}
+
+

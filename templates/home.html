@@ -1,0 +1,98 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<section class="hero">
+  <div class="hero-slider" data-autoplay="true">
+    {% for img in hero_images %}
+      <div class="slide" style="background-image:url('{{ img.image.url }}')">
+        {% if img.caption %}<div class="caption">{{ img.caption }}</div>{% endif %}
+      </div>
+    {% empty %}
+      <div class="slide placeholder" style="background-image:url('{% static 'logo.png' %}')"></div>
+    {% endfor %}
+    <div class="overlay"></div>
+    <div class="hero-content container">
+      <h1>Explore the world with ZikRme</h1>
+      <form class="search" action="{% url 'posts_list' %}" method="get">
+        <input type="text" name="q" value="{{ query }}" placeholder="Search destinations, tips, stories..." />
+        <button type="submit"><i class="ri-search-line"></i> Search</button>
+      </form>
+    </div>
+  </div>
+</section>
+
+<section class="container section">
+  <div class="categories-chips">
+    <a class="chip primary" href="{% url 'posts_list' %}"><i class="ri-global-line"></i> All Posts</a>
+    {% for c in categories %}
+      <a class="chip" href="{% url 'posts_by_category' c.slug %}"><i class="{{ c.icon_class|default:'ri-hashtag' }}"></i> {{ c.name }}</a>
+    {% endfor %}
+  </div>
+</section>
+
+<section class="container section">
+  <div class="section-head">
+    <h2>Blogs</h2>
+    <a href="{% url 'posts_list' %}" class="btn-link">Explore all</a>
+  </div>
+  <div class="cards">
+    {% for p in posts_sample %}
+      {% include 'partials/post_card.html' with post=p %}
+    {% empty %}
+      <p>No posts yet.</p>
+    {% endfor %}
+  </div>
+</section>
+
+<section class="container section">
+  <div class="section-head">
+    <h2>Featured Posts</h2>
+    <a href="{% url 'featured_list' %}" class="btn-link">Explore more</a>
+  </div>
+  <div class="cards">
+    {% for p in featured_posts %}
+      {% include 'partials/post_card.html' with post=p %}
+    {% empty %}
+      <p>No featured posts yet.</p>
+    {% endfor %}
+  </div>
+</section>
+
+<section class="container section">
+  <div class="section-head">
+    <h2>Latest Articles</h2>
+    <a href="{% url 'articles_list' %}" class="btn-link">Explore more</a>
+  </div>
+  <div class="cards">
+    {% for p in article_posts %}
+      {% include 'partials/post_card.html' with post=p %}
+    {% empty %}
+      <p>No articles yet.</p>
+    {% endfor %}
+  </div>
+</section>
+
+{% if home_mini_video %}
+  <div class="floating-mini-video" data-draggable="true">
+    {% if home_mini_video.video_file %}
+      <video src="{{ home_mini_video.video_file.url }}" 
+             {% if home_mini_video.autoplay %}autoplay{% endif %} 
+             {% if home_mini_video.muted %}muted{% endif %} 
+             playsinline loop controls></video>
+    {% elif home_mini_video.youtube_url %}
+      {% with raw=home_mini_video.youtube_url %}
+      {% with id=raw|cut:'https://youtu.be/'|cut:'https://www.youtube.com/watch?v='|cut:'https://m.youtube.com/watch?v='|cut:'https://youtube.com/watch?v='|cut:'https://www.youtube.com/shorts/'|cut:'https://youtube.com/shorts/' %}
+      <iframe src="https://www.youtube.com/embed/{{ id|slice:':11' }}?autoplay={% if home_mini_video.autoplay %}1{% else %}0{% endif %}&mute={% if home_mini_video.muted %}1{% else %}0{% endif %}&playsinline=1&rel=0&modestbranding=1&loop=1&playlist={{ id|slice:':11' }}&enablejsapi=1" 
+              title="Home Mini Video" 
+              frameborder="0" 
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+              allowfullscreen></iframe>
+      {% endwith %}
+      {% endwith %}
+    {% endif %}
+    <button class="close-mini-video" aria-label="Close">×</button>
+  </div>
+{% endif %}
+{% endblock %}
+

@@ -1,0 +1,145 @@
+{% extends "admin/base_site.html" %}
+{% load i18n admin_urls static admin_modify %}
+
+{% block extrahead %}
+    {{ block.super }}
+    <style>
+        .bulk-upload-form {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .file-input-group {
+            margin-bottom: 15px;
+            padding: 15px;
+            border: 2px dashed #ddd;
+            border-radius: 8px;
+            text-align: center;
+        }
+        .file-input-group:hover {
+            border-color: #79aec8;
+        }
+        .file-input {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+        }
+        .caption-input {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            margin-bottom: 10px;
+        }
+        .add-more-btn {
+            background: #79aec8;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-right: 10px;
+        }
+        .submit-btn {
+            background: #417690;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        .remove-btn {
+            background: #ba2121;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-left: 10px;
+        }
+        .instructions {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 6px;
+            margin-bottom: 20px;
+            border-left: 4px solid #79aec8;
+        }
+    </style>
+{% endblock %}
+
+{% block breadcrumbs %}
+<div class="breadcrumbs">
+    <a href="{% url 'admin:index' %}">{% trans 'Home' %}</a>
+    &rsaquo; <a href="{% url 'admin:app_list' app_label=opts.app_label %}">{{ opts.app_config.verbose_name }}</a>
+    &rsaquo; <a href="{% url 'admin:zikrmeblogapp_heroimage_changelist' %}">{{ opts.verbose_name_plural|capfirst }}</a>
+    &rsaquo; Bulk Upload
+</div>
+{% endblock %}
+
+{% block content %}
+<div class="bulk-upload-form">
+    <h1>Bulk Upload Hero Images</h1>
+    
+    <div class="instructions">
+        <h3>Instructions:</h3>
+        <ul>
+            <li>Select multiple images to upload at once</li>
+            <li>Add optional captions for each image</li>
+            <li>Images will be automatically ordered and activated</li>
+            <li>Supported formats: JPG, PNG, GIF, WebP</li>
+        </ul>
+    </div>
+
+    <form method="post" enctype="multipart/form-data" id="bulk-upload-form">
+        {% csrf_token %}
+        <div id="file-inputs">
+            <div class="file-input-group">
+                <input type="file" name="images" class="file-input" accept="image/*" required>
+                <input type="text" name="captions" class="caption-input" placeholder="Caption (optional)">
+            </div>
+        </div>
+        
+        <div style="margin: 20px 0;">
+            <button type="button" class="add-more-btn" onclick="addMoreInputs()">+ Add More Images</button>
+            <button type="submit" class="submit-btn">Upload All Images</button>
+        </div>
+    </form>
+</div>
+
+<script>
+function addMoreInputs() {
+    const container = document.getElementById('file-inputs');
+    const newGroup = document.createElement('div');
+    newGroup.className = 'file-input-group';
+    
+    newGroup.innerHTML = `
+        <input type="file" name="images" class="file-input" accept="image/*">
+        <input type="text" name="captions" class="caption-input" placeholder="Caption (optional)">
+        <button type="button" class="remove-btn" onclick="removeInput(this)">Remove</button>
+    `;
+    
+    container.appendChild(newGroup);
+}
+
+function removeInput(button) {
+    button.parentElement.remove();
+}
+
+// Auto-add more inputs when files are selected
+document.addEventListener('change', function(e) {
+    if (e.target.classList.contains('file-input') && e.target.files.length > 0) {
+        // Check if this is the last input and it has a file
+        const inputs = document.querySelectorAll('.file-input');
+        const lastInput = inputs[inputs.length - 1];
+        
+        if (e.target === lastInput && e.target.files.length > 0) {
+            addMoreInputs();
+        }
+    }
+});
+</script>
+{% endblock %}

@@ -1,0 +1,15 @@
+{% if hero_image %}
+<section class="page-hero">
+  <div class="page-hero-bg" style="background-image:url('{{ hero_image.image.url }}')">
+    <div class="overlay"></div>
+    <div class="hero-content container">
+      {% if hero_image.title %}
+        <h1>{{ hero_image.title }}</h1>
+      {% endif %}
+      {% if hero_image.subtitle %}
+        <p class="hero-subtitle">{{ hero_image.subtitle }}</p>
+      {% endif %}
+    </div>
+  </div>
+</section>
+{% endif %}

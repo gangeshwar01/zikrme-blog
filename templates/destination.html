@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+{% include 'partials/page_hero.html' %}
+
+<section class="container section">
+  <div class="section-head">
+    <h2>Explore Destinations</h2>
+    <p>Discover amazing places around the world</p>
+  </div>
+  <div class="destinations-grid">
+    {% for dest in destinations %}
+      <div class="destination-card">
+        <h3>{{ dest.title }}</h3>
+        <p>{{ dest.description|truncatewords:20 }}</p>
+        <a href="{% url 'destination_detail' dest.slug %}" class="btn-link">Learn More</a>
+      </div>
+    {% empty %}
+      <p>No destinations available.</p>
+    {% endfor %}
+  </div>
+</section>
+{% endblock %}
+
