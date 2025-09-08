@@ -29,6 +29,9 @@ DEBUG = os.environ.get('DEBUG', '1') == '1'
 
 # Hosts are provided by Render via env or your own domain (comma-separated)
 ALLOWED_HOSTS = [h for h in os.environ.get('ALLOWED_HOSTS', '*').split(',') if h]
+# Ensure Render hostname is included
+if 'zikrme-blog.onrender.com' not in ALLOWED_HOSTS and '*' not in ALLOWED_HOSTS:
+    ALLOWED_HOSTS.append('zikrme-blog.onrender.com')
 
 
 # Application definition
@@ -175,6 +178,8 @@ SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 RENDER_EXTERNAL_HOSTNAME = os.environ.get('RENDER_EXTERNAL_HOSTNAME')
 if RENDER_EXTERNAL_HOSTNAME:
     CSRF_TRUSTED_ORIGINS.append(f"https://{RENDER_EXTERNAL_HOSTNAME}")
+if 'https://zikrme-blog.onrender.com' not in CSRF_TRUSTED_ORIGINS:
+    CSRF_TRUSTED_ORIGINS.append('https://zikrme-blog.onrender.com')
 
 # WhiteNoise for static files on Render
 MIDDLEWARE.insert(1, 'whitenoise.middleware.WhiteNoiseMiddleware')
