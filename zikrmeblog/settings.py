@@ -23,9 +23,16 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'django-insecure-scth^479*e41d@cf$4^bs4wbvx_qcf5ms7t+@q933!&yztp-%u'
 
+def get_bool_env(name: str, default: bool) -> bool:
+    val = os.environ.get(name)
+    if val is None:
+        return default
+    return val.strip().lower() in {"1", "true", "yes", "on"}
+
 # SECURITY WARNING: don't run with debug turned on in production!
-# Read from environment: set DEBUG=1 locally; Render sets it to 0 by default
-DEBUG = os.environ.get('DEBUG', '1') == '1'
+# Accept multiple truthy strings: 1/true/yes/on
+DEBUG = get_bool_env('DEBUG', True)
+DEBUG_PROPAGATE_EXCEPTIONS = DEBUG
 
 # Hosts are provided by Render via env or your own domain (comma-separated)
 ALLOWED_HOSTS = [h for h in os.environ.get('ALLOWED_HOSTS', '*').split(',') if h]
