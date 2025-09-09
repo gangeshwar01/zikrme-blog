@@ -135,10 +135,11 @@ h1,h2,h3{line-height:1.25}
 .footer-grid ul li{margin:8px 0}
 .footer-grid a{color:#e7d5c4;text-decoration:none;transition:color 0.2s ease}
 .footer-grid a:hover{color:var(--brand)}
-.footer-brand .logo-line{display:flex;gap:14px;align-items:center;margin-bottom:8px;}
+.footer-brand .logo-line{display:block;margin-bottom:8px;}
 .footer-brand .logo-line > div{display:flex;gap:6px;align-items:baseline;flex-wrap:nowrap;margin-left: -15px;}
-.footer-brand img{height:80px;width:110px;border-radius:12px;margin-top: -20px;}
+.footer-brand img{float:left;height:48px;width:auto;border-radius:12px;margin:0 12px 8px 0;}
 .footer-brand p{color:#e7d5c4;line-height:1.6}
+.footer-brand .socials{clear:both}
 .socials{display:flex;gap:10px;margin-top:12px}
 .socials a{display:grid;place-items:center;height:44px;width:44px;border-radius:12px;background:#3d2b1e;border:1px solid #5a4a3a;color:#e7d5c4;transition:all 0.2s ease}
 .socials a:hover{background:var(--brand);color:#fff;border-color:var(--brand)}
@@ -164,7 +165,7 @@ h1,h2,h3{line-height:1.25}
   .footer-grid h4{font-size:18px;margin:0 0 16px}
   .footer-grid ul li{margin:10px 0}
   .footer-brand .logo-line{margin-bottom:12px;justify-content:center}
-  .footer-brand img{height:60px;width:80px;margin-top:0}
+  .footer-brand img{float:none;display:block;height:60px;width:auto;margin:0 auto 12px;border-radius:12px}
   .footer-brand p{font-size:14px;line-height:1.7;margin-bottom:16px}
   .socials{margin-top:16px;justify-content:center}
   .socials a{width:40px;height:40px}
